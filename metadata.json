@@ -1,0 +1,6 @@
+{
+  "name": "Crestline Capital",
+  "description": "Production-grade digital banking and financial management platform featuring double-entry ledger architecture, instant transfers, deposits, withdrawals, real-time audit logging, and institutional compliance controls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

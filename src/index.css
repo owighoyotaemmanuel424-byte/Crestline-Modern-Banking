@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@media print {
+  aside,
+  header,
+  nav,
+  .no-print,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  body, html {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th, td {
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 8px 12px !important;
+  }
+
+  thead {
+    background-color: #f8fafc !important;
+    display: table-header-group !important;
+  }
+
+  tr {
+    page-break-inside: avoid !important;
+  }
+}
