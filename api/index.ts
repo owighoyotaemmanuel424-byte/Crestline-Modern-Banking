@@ -13,11 +13,11 @@ export default async function handler(req: Request, res: Response) {
   try {
     const app = await getApp();
     return app(req, res);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Crestline API initialization failure:", error);
     return res.status(500).json({
       success: false,
-      error: error?.message || "API initialization failed"
+      error: "Internal server error"
     });
   }
 }
