@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import { createServer as createViteServer } from "vite";
 import { initDatabase } from "./server/db.js";
 import { authRouter } from "./server/routes/auth.js";
 import { accountsRouter } from "./server/routes/accounts.js";
@@ -70,6 +69,7 @@ async function startServer() {
   // Vercel serves the built SPA separately and imports the exported Express app
   // through api/[...path].ts for /api/* requests.
   if (process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
