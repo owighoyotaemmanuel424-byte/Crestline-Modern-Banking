@@ -12,27 +12,11 @@ import { adminRouter } from "./server/routes/admin.js";
 import { cardsRouter } from "./server/routes/cards.js";
 import { securityRouter } from "./server/routes/security.js";
 
-let databaseInitError: unknown = null;
-
-try {
-  initDatabase();
-} catch (error) {
-  databaseInitError = error;
-  console.error("Crestline database initialization failed:", error);
-}
+initDatabase();
 
 export const app = express();
 
 app.use(express.json({ limit: "10mb" }));
-
-if (databaseInitError) {
-  app.use((req, res) => {
-    const message = databaseInitError instanceof Error
-      ? databaseInitError.message
-      : String(databaseInitError);
-    res.status(500).json({ success: false, error: message });
-  });
-}
 
 // Security headers
 app.use((req, res, next) => {
