@@ -2,11 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/index.ts": {
-      "includeFiles": [
-        "crestline_bank.db",
-        "crestline_bank.db-wal",
-        "crestline_bank.db-shm"
-      ]
+      "includeFiles": "crestline_bank.db*"
     }
   },
   "rewrites": [
