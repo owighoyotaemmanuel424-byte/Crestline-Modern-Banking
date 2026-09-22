@@ -1,31 +1,19 @@
 import { DatabaseSync } from "node:sqlite";
 import path from "node:path";
-import fs from "node:fs";
 import crypto from "node:crypto";
 
-const BUNDLED_DB_PATH = path.join(process.cwd(), "crestline_bank.db");
-const VERCEL_DB_PATH = path.join("/tmp", "crestline_bank.db");
-const DB_PATH = process.env.VERCEL ? VERCEL_DB_PATH : BUNDLED_DB_PATH;
-
-// Vercel deployments have a read-only application filesystem. Use a disposable
-// /tmp copy for the SQLite runtime while preserving the bundled seed database.
-if (process.env.VERCEL && !fs.existsSync(VERCEL_DB_PATH)) {
-  if (fs.existsSync(BUNDLED_DB_PATH)) {
-    fs.copyFileSync(BUNDLED_DB_PATH, VERCEL_DB_PATH);
-    for (const suffix of ["-wal", "-shm"]) {
-      const source = BUNDLED_DB_PATH + suffix;
-      const target = VERCEL_DB_PATH + suffix;
-      if (fs.existsSync(source)) {
-        fs.copyFileSync(source, target);
-      }
-    }
-  }
-}
+const DB_PATH = process.env.VERCEL
+  ? ":memory:"
+  : path.join(process.cwd(), "crestline_bank.db");
 
 export const db = new DatabaseSync(DB_PATH);
 
-// Enable WAL mode & foreign keys for high performance and integrity
-db.exec("PRAGMA journal_mode = WAL;");
+// Vercel Functions run with an immutable deployment filesystem. Keep the
+// serverless demo/runtime database in memory and enable WAL only for local
+// file-backed SQLite.
+if (!process.env.VERCEL) {
+  db.exec("PRAGMA journal_mode = WAL;");
+}
 db.exec("PRAGMA foreign_keys = ON;");
 
 export function initDatabase() {
@@ -286,7 +274,7 @@ export function initDatabase() {
   // Initialize essential system configuration
   seedEssentialSystemSettings();
 
-  const isProduction = process.env.NODE_ENV === "production" || process.env.PURGE_DEMO_DATA === "true";
+  const isProduction = process.env.PURGE_DEMO_DATA === "true";
 
   if (isProduction) {
     // In production deployments, permanently purge all demo accounts and mock data
